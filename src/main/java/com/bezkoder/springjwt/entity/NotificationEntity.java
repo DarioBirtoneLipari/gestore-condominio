@@ -3,7 +3,9 @@ package com.bezkoder.springjwt.entity;
 import java.util.Date;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +25,7 @@ public class NotificationEntity {
     @Column
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name="user_id")
     private UserEntity user;
 

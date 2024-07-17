@@ -3,7 +3,9 @@ package com.bezkoder.springjwt.entity;
 import java.util.Date;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +19,7 @@ public class UsageEntity {
 	@Column
 	private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "house")
     private HouseEntity house;
 

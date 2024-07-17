@@ -47,6 +47,7 @@ public class UserController {
         }
     }
 
+    
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @PatchMapping("patchUpdate")
     public ResponseDTO updateUser(@RequestBody UserDTO user){
@@ -64,7 +65,6 @@ public class UserController {
             response.setMessage("failed. Check inputs.");
             response.setO(user);
             return response;
-
         }
     }
 

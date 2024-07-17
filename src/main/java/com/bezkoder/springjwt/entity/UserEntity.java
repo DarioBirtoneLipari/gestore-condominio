@@ -7,7 +7,7 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "users", 
@@ -46,10 +46,10 @@ public class UserEntity {
 	@Column
 	private Date birthDate;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
 	private List<HouseEntity> houses;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.MERGE, CascadeType.REMOVE })
 	private List<NotificationEntity> notifications;
 
 	@Column

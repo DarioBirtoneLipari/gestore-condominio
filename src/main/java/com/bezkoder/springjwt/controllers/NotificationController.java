@@ -43,7 +43,8 @@ public class NotificationController {
             response.setMessage("notification saved");
             response.setO(notification);
             notificationService.newNotification((NotificationDTO) response.getO());
-            return response;}
+            return response;
+        }
         else{  
             response.setType("save");
             response.setHTTPstatus("400");

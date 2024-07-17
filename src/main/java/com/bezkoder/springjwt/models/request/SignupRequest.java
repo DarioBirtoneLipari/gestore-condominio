@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Set;
 
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.Data;
 
 @Data
 public class SignupRequest {

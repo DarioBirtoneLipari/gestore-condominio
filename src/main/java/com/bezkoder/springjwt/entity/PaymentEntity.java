@@ -3,7 +3,9 @@ package com.bezkoder.springjwt.entity;
 import java.util.Date;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,11 +31,11 @@ public class PaymentEntity {
     @Column
     private boolean ongoing;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name="user_id")
     private UserEntity user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name="house_id")
     private HouseEntity house;
 

@@ -1,7 +1,7 @@
 package com.bezkoder.springjwt.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "roles")
