@@ -56,7 +56,7 @@ public class UserController {
             response.setHTTPstatus("200");
             response.setMessage("user updated");
             response.setO(user);
-            userService.newUser((UserDTO) response.getO());
+            userService.update((UserDTO) response.getO());
             return response;}
         else{  
             response.setType("patch update");

@@ -67,7 +67,7 @@ public class HouseController {
     @PatchMapping("patchUpdate")
     public ResponseDTO patchUpdateHouse(@RequestBody HouseDTO house){
         ResponseDTO response = new ResponseDTO();
-        if(houseService.checkValue(house)){
+        if(houseService.checkId(house.getId())){
             response.setType("patch update");
             response.setHTTPstatus("200");
             response.setMessage("house updated");
@@ -254,11 +254,11 @@ public class HouseController {
     @GetMapping("get/houses/by/name/{name}/{surname}")
     public ResponseListDTO getAllHousesByName(@PathVariable String name, @PathVariable String surname){
         ResponseListDTO response = new ResponseListDTO();
-        if(houseService.getAllHousesByName(name, surname).size()>0){
+        if(houseService.getAllHousesByNameAndSurname(name, surname).size()>0){
             response.setType("get");
             response.setHTTPstatus("200");
             response.setMessage("ok");
-            response.setLo(houseService.getAllHousesByName(name, surname).stream()
+            response.setLo(houseService.getAllHousesByNameAndSurname(name, surname).stream()
             .map(obj -> (Object) obj)
             .collect(Collectors.toList()));
             return response;}
@@ -284,6 +284,25 @@ public class HouseController {
             .collect(Collectors.toList()));
             return response;}
         else{  
+            response.setType("no houses found");
+            response.setHTTPstatus("400");
+            response.setMessage("ko");
+            return response;
+        }
+    }
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @PostMapping("search")
+    public ResponseListDTO search(@RequestBody HouseDTO house){
+        ResponseListDTO response = new ResponseListDTO();
+        if(houseService.commandGetHandler(house).size()>0){
+            response.setType("post");
+            response.setHTTPstatus("200");
+            response.setMessage("ok");
+            response.setLo(houseService.commandGetHandler(house).stream()
+            .map(obj -> (Object) obj)
+            .collect(Collectors.toList()));
+            return response;
+        }else{  
             response.setType("no houses found");
             response.setHTTPstatus("400");
             response.setMessage("ko");
