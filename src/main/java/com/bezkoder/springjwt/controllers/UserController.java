@@ -97,7 +97,7 @@ public class UserController {
     }
 
     
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @GetMapping("get/{id}")
     public ResponseDTO getUserById(@PathVariable String id){
         ResponseDTO response = new ResponseDTO();
