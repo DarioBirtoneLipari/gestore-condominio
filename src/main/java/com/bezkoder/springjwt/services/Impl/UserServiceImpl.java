@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         UserEntity entity = userMapper.dtoToEntity(getUserById(oe.getId())); // utente con tutti i campi non nulli
         List<String> stringFields = Arrays.asList("name", "surname", "email", "password", "cell", "profileImg", "creditCard", "holder");
         List<String> intFields = Arrays.asList("cvv");
-        List<String> booleanFields = Arrays.asList("isBuildingManager");
+    
         //TODO date type
         for (Field field : UserEntity.class.getDeclaredFields()) {
             try {
@@ -64,9 +64,7 @@ public class UserServiceImpl implements UserService {
                     if (value > 0) {
                         field.set(entity, value);
                     }
-                }else if (booleanFields.contains(field.getName())) {
-                    boolean value = (boolean) field.get(oe);
-                    field.set(entity, value);}
+                }
                     
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -116,18 +114,7 @@ public class UserServiceImpl implements UserService {
 			return user;  }
         }
 
-    @Override
-    public boolean checkValueRegistration(UserDTO user){
-
-        if (user.getEmail().length()>0 &&
-            user.getPassword().length()>0 &&
-            userRepository.findByEmail(user.getEmail()).isEmpty()) { 
-                return true;
-        }
-        else{
-            return false;
-        }
-    }
+    
 
     @Override
     public boolean checkValue(UserDTO user){

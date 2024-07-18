@@ -40,7 +40,7 @@ public class UserController {
             response.setHTTPstatus("200");
             response.setMessage("user updted");
             response.setO(user);
-            userService.newUser((UserDTO) response.getO());
+            userService.update((UserDTO) response.getO());
             return response;}
         else{  
             response.setType("put update");
@@ -63,7 +63,7 @@ public class UserController {
             response.setMessage("user updated");
             user.setPassword( encoder.encode(user.getPassword()));
             response.setO(user);
-            userService.newUser((UserDTO) response.getO());
+            userService.update((UserDTO) response.getO());
             return response;}
         else{  
             response.setType("patch update");

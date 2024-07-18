@@ -13,7 +13,7 @@ public interface UserService {
     public List<UserDTO> getAllUsers();
     public UserDTO getUserByEmail(String email);
 
-    public boolean checkValueRegistration(UserDTO user);
+   
     public boolean checkValue(UserDTO user);
     public boolean checkId(String id);
     
