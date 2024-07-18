@@ -10,27 +10,19 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "users", 
-    uniqueConstraints = { 
-      @UniqueConstraint(columnNames = "username"),
-      @UniqueConstraint(columnNames = "email") 
-    })
+@Table(name = "users")
 @Data
 public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private String id;
 
-  @NotBlank
   @Size(max = 20)
   private String username;
 
-  @NotBlank
   @Size(max = 50)
-  @Email
   private String email;
 
-  @NotBlank
   @Size(max = 120)
   private String password;
 
@@ -72,6 +64,25 @@ public class UserEntity {
         joinColumns = @JoinColumn(name = "user_id"), 
         inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
+
+  public UserEntity(String id, @NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 50) @Email String email,
+      @NotBlank @Size(max = 120) String password, String name, String surname, String cell, Date birthDate,
+      List<HouseEntity> houses, String profileImg, String creditCard, int cvv, Date expire, String holder) {
+    this.id = id;
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    this.name = name;
+    this.surname = surname;
+    this.cell = cell;
+    this.birthDate = birthDate;
+    this.houses = houses;
+    this.profileImg = profileImg;
+    this.creditCard = creditCard;
+    this.cvv = cvv;
+    this.expire = expire;
+    this.holder = holder;
+  }
 
   public UserEntity(){
     

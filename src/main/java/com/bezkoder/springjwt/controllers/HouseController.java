@@ -31,8 +31,7 @@ public class HouseController {
             response.setMessage("house saved");
             response.setO(house);
             houseService.newHouse((HouseDTO) response.getO());
-            return response;
-        }
+            return response;}
         else{  
             response.setType("save");
             response.setHTTPstatus("400");
@@ -53,8 +52,7 @@ public class HouseController {
             response.setMessage("house updated");
             response.setO(house);
             houseService.update((HouseDTO) response.getO());
-            return response;
-        }
+            return response;}
         else{  
             response.setType("update");
             response.setHTTPstatus("400");
@@ -69,7 +67,7 @@ public class HouseController {
     @PatchMapping("patchUpdate")
     public ResponseDTO patchUpdateHouse(@RequestBody HouseDTO house){
         ResponseDTO response = new ResponseDTO();
-        if(houseService.checkValue(house)){
+        if(houseService.checkId(house.getId())){
             response.setType("patch update");
             response.setHTTPstatus("200");
             response.setMessage("house updated");
@@ -98,8 +96,7 @@ public class HouseController {
             response.setMessage("house deleted");
             response.setO((HouseDTO) houseService.getHouseById(id));
             houseService.deleteHouseById(id);
-            return response;
-        }
+            return response;}
         else{  
             response.setType("delete");
             response.setHTTPstatus("400");
@@ -119,8 +116,7 @@ public class HouseController {
             response.setHTTPstatus("200");
             response.setMessage("ok");
             response.setO((HouseDTO) houseService.getHouseById(id));
-            return response;
-        }
+            return response;}
         else{  
             response.setType("failed");
             response.setHTTPstatus("400");
@@ -140,8 +136,7 @@ public class HouseController {
             response.setLo(houseService.getAllHouses().stream()
             .map(obj -> (Object) obj)
             .collect(Collectors.toList()));
-            return response;
-        }
+            return response;}
         else{  
             response.setType("no houses found");
             response.setHTTPstatus("400");
@@ -150,7 +145,7 @@ public class HouseController {
         }
     }
 
-//TO-DO: pre authorized is autenticated, user principal per get
+
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @GetMapping("get/houses/by/{userId}")
     public ResponseListDTO getHousesByUser(@PathVariable String userId){
@@ -162,8 +157,7 @@ public class HouseController {
             response.setLo(houseService.getHousesByUserId(userId).stream()
             .map(obj -> (Object) obj)
             .collect(Collectors.toList()));
-            return response;
-        }
+            return response;}
         else{  
             response.setType("no houses found");
             response.setHTTPstatus("400");
@@ -184,8 +178,7 @@ public class HouseController {
             response.setLo(houseService.getAllHousesByScala(scala).stream()
             .map(obj -> (Object) obj)
             .collect(Collectors.toList()));
-            return response;
-        }
+            return response;}
         else{  
             response.setType("no houses found");
             response.setHTTPstatus("400");
@@ -205,8 +198,7 @@ public class HouseController {
             response.setLo(houseService.getAllHousesByPiano(piano).stream()
             .map(obj -> (Object) obj)
             .collect(Collectors.toList()));
-            return response;
-        }
+            return response;}
         else{  
             response.setType("no houses found");
             response.setHTTPstatus("400");
@@ -226,8 +218,7 @@ public class HouseController {
             response.setLo(houseService.getAllHousesByScalaAndPiano(scala, piano).stream()
             .map(obj -> (Object) obj)
             .collect(Collectors.toList()));
-            return response;
-        }
+            return response;}
         else{  
             response.setType("no houses found");
             response.setHTTPstatus("400");
@@ -249,8 +240,7 @@ public class HouseController {
             response.setLo(houseService.getAllHousesByScalaAndPianoAndInterno(scala, piano, interno).stream()
             .map(obj -> (Object) obj)
             .collect(Collectors.toList()));
-            return response;
-        }
+            return response;}
         else{  
             response.setType("no houses found");
             response.setHTTPstatus("400");
@@ -264,15 +254,14 @@ public class HouseController {
     @GetMapping("get/houses/by/name/{name}/{surname}")
     public ResponseListDTO getAllHousesByName(@PathVariable String name, @PathVariable String surname){
         ResponseListDTO response = new ResponseListDTO();
-        if(houseService.getAllHousesByName(name, surname).size()>0){
+        if(houseService.getAllHousesByNameAndSurname(name, surname).size()>0){
             response.setType("get");
             response.setHTTPstatus("200");
             response.setMessage("ok");
-            response.setLo(houseService.getAllHousesByName(name, surname).stream()
+            response.setLo(houseService.getAllHousesByNameAndSurname(name, surname).stream()
             .map(obj -> (Object) obj)
             .collect(Collectors.toList()));
-            return response;
-        }
+            return response;}
         else{  
             response.setType("no houses found");
             response.setHTTPstatus("400");
@@ -293,8 +282,7 @@ public class HouseController {
             response.setLo(houseService.getAllFreeHouses().stream()
             .map(obj -> (Object) obj)
             .collect(Collectors.toList()));
-            return response;
-        }
+            return response;}
         else{  
             response.setType("no houses found");
             response.setHTTPstatus("400");
@@ -302,5 +290,26 @@ public class HouseController {
             return response;
         }
     }
- 
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @PostMapping("search")
+    public ResponseListDTO search(@RequestBody HouseDTO house){
+        ResponseListDTO response = new ResponseListDTO();
+        if(houseService.commandGetHandler(house).size()>0){
+            response.setType("post");
+            response.setHTTPstatus("200");
+            response.setMessage("ok");
+            response.setLo(houseService.commandGetHandler(house).stream()
+            .map(obj -> (Object) obj)
+            .collect(Collectors.toList()));
+            return response;
+        }else{  
+            response.setType("no houses found");
+            response.setHTTPstatus("400");
+            response.setMessage("ko");
+            return response;
+        }
+    }
+
+
+    
 }

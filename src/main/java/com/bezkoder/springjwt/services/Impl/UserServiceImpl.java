@@ -1,11 +1,14 @@
 package com.bezkoder.springjwt.services.Impl;
 
-
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import com.bezkoder.springjwt.entity.UserEntity;
 import com.bezkoder.springjwt.mapper.HouseMapper;
@@ -14,6 +17,8 @@ import com.bezkoder.springjwt.models.UserDTO;
 import com.bezkoder.springjwt.repository.HouseRepository;
 import com.bezkoder.springjwt.repository.UserRepository;
 import com.bezkoder.springjwt.services.UserService;
+
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,9 +45,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO update(UserDTO user) {
-        UserEntity oe = userMapper.dtoToEntity(user);
-		oe = userRepository.save(oe);
-		return userMapper.entityToDto(oe);
+        UserEntity oe = userMapper.dtoToEntity(user); // utente con alcuni campi null
+        UserEntity entity = userMapper.dtoToEntity(getUserById(oe.getId())); // utente con tutti i campi non nulli
+        List<String> stringFields = Arrays.asList("name", "surname", "email", "password", "cell", "profileImg", "creditCard", "holder");
+        List<String> intFields = Arrays.asList("cvv");
+        List<String> booleanFields = Arrays.asList("isBuildingManager");
+        //TODO date type
+        for (Field field : UserEntity.class.getDeclaredFields()) {
+            try {
+                field.setAccessible(true);
+                if (stringFields.contains(field.getName())) {
+                    String value = (String) field.get(oe);
+                    if (value != null && value.length() > 0) {
+                        field.set(entity, value);
+                    }
+                } else if (intFields.contains(field.getName())) {
+                    int value = (int) field.get(oe);
+                    if (value > 0) {
+                        field.set(entity, value);
+                    }
+                }else if (booleanFields.contains(field.getName())) {
+                    boolean value = (boolean) field.get(oe);
+                    field.set(entity, value);}
+                    
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        entity = userRepository.save(entity);
+        return userMapper.entityToDto(entity);
     }
 
     @Override

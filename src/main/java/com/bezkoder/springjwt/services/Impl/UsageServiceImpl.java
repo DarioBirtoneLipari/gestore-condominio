@@ -1,5 +1,7 @@
 package com.bezkoder.springjwt.services.Impl;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +33,26 @@ public class UsageServiceImpl implements UsageService {
 
     @Override
     public UsageDTO update(UsageDTO usage) {
-        UsageEntity ue = usageMapper.dtoToEntity(usage);
-        ue = usageRepository.save(ue);
-        return usageMapper.entityToDto(ue);
+        UsageEntity oe = usageMapper.dtoToEntity(usage); // utente con alcuni campi null
+        UsageEntity entity = usageMapper.dtoToEntity(getUsageById(oe.getId())); // utente con tutti i campi non nulli
+        List<String> intFields = Arrays.asList("water","gas");
+        //TODO date type and external key ?
+        for (Field field : UsageEntity.class.getDeclaredFields()) {
+            try {
+                field.setAccessible(true);
+                if (intFields.contains(field.getName())) {
+                    int value = (int) field.get(oe);
+                    if (value > 0) {
+                        field.set(entity, value);
+                    }
+                }
+                    
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        entity = usageRepository.save(entity);
+        return usageMapper.entityToDto(entity);
     }
 
     @Override

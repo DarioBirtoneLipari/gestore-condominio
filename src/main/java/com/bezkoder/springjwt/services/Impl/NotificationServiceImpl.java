@@ -1,6 +1,9 @@
 package com.bezkoder.springjwt.services.Impl;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +33,25 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationDTO update(NotificationDTO notification) {
-        NotificationEntity ne = notificationMapper.dtoToEntity(notification);
-		ne = notificationRepository.save(ne);
-		return notificationMapper.entityToDto(ne);
+        NotificationEntity oe = notificationMapper.dtoToEntity(notification); // utente con alcuni campi null
+        NotificationEntity entity = notificationMapper.dtoToEntity(getNotificationById(oe.getId())); // utente con tutti i campi non nulli
+        List<String> stringFields = Arrays.asList("text", "creditCard");
+        //TODO date type and external key ?
+        for (Field field : NotificationEntity.class.getDeclaredFields()) {
+            try {
+                field.setAccessible(true);
+                if (stringFields.contains(field.getName())) {
+                    String value = (String) field.get(oe);
+                    if (value != null && value.length() > 0) {
+                        field.set(entity, value);
+                    }
+                } 
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        entity = notificationRepository.save(entity);
+        return notificationMapper.entityToDto(entity);
     }
 
     @Override

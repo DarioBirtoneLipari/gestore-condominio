@@ -3,6 +3,8 @@ package com.bezkoder.springjwt.models.request;
 import java.util.Date;
 import java.util.Set;
 
+import com.bezkoder.springjwt.models.HouseDTO;
+
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -32,6 +34,7 @@ public class SignupRequest {
 	private int cvv;
 	private Date expire;
 	private String holder;
+ 
 
   
 }
