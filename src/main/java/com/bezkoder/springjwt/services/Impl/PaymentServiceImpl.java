@@ -50,7 +50,7 @@ public class PaymentServiceImpl implements PaymentService {
                         field.set(entity, value);
                     }
                 } else if (intFields.contains(field.getName())) {
-                    int value = (int) field.get(oe);
+                    float value = (float) field.get(oe);
                     if (value > 0) {
                         field.set(entity, value);
                     }
@@ -111,9 +111,8 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
     public boolean checkValue(PaymentDTO payment) {
         //Date today = new Date();
-        if (payment.getHouse().getId().length()>0 &&
-            payment.getCreditCard().length()>15 &&
-            payment.getUser().getId().length()>0)
+        if (
+            payment.getCreditCard().length()>15)
            {
                 return true;
         }

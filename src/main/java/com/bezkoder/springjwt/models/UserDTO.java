@@ -10,7 +10,6 @@ public class UserDTO {
  
 
 	private String id;
-	private boolean buildingManager; //nome diverso a progettazione
 	private String name;
 	private String surname;
 	private String email;
