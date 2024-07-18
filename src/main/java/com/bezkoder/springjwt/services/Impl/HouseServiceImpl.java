@@ -440,6 +440,17 @@ public class HouseServiceImpl implements HouseService {
         else
         {return false;}
     }
+    public boolean checkTriple(String scala, int piano, int interno) {
+        List<HouseDTO> houses = getAllHouses();
+        for (HouseDTO house : houses) {
+            if (house.getScala().equals(scala) && house.getPiano() == piano && house.getInterno() == interno) {
+                return false; 
+            }
+        }
+    
+        return true;
+    }
+    
 
    
 

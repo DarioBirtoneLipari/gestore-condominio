@@ -67,7 +67,7 @@ public class HouseController {
     @PatchMapping("patchUpdate")
     public ResponseDTO patchUpdateHouse(@RequestBody HouseDTO house){
         ResponseDTO response = new ResponseDTO();
-        if(houseService.checkId(house.getId())){
+        if(houseService.checkId(house.getId()) && houseService.checkTriple(house.getScala(),house.getPiano(),house.getInterno())){
             response.setType("patch update");
             response.setHTTPstatus("200");
             response.setMessage("house updated");

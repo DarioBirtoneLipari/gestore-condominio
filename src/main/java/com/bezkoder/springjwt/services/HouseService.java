@@ -45,6 +45,7 @@ public interface HouseService {
     public List<HouseDTO> getAllHousesBySurname(String surname);
     public List<HouseDTO>getAllHousesByNameAndSurname(String name, String surname);
     public List<HouseDTO> commandGetHandler(HouseDTO house);
+    public boolean checkTriple(String scala, int piano, int interno);
     
     public boolean checkValue(HouseDTO house);
     public boolean checkId(String id);
