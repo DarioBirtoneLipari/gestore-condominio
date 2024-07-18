@@ -1,3 +1,4 @@
+
 package com.bezkoder.springjwt.mapper;
 
 import java.util.Set;
@@ -15,3 +16,4 @@ public interface UsageMapper {
 	UsageDTO entityToDto(UsageEntity entity);
     
 }
+	
