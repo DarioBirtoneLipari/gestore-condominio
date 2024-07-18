@@ -143,6 +143,64 @@ public class HouseServiceImpl implements HouseService {
         .stream().map(houseMapper::entityToDto)
         .toList();
     }
+    public List<HouseDTO>getAllHousesByScalaAndPianoAndNameAndSurname(String scala,int piano,String name,String surname){
+        return houseRepository.findByScalaAndPianoAndNameAndSurname(scala, piano,name,surname)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+    public List<HouseDTO>getAllHousesByScalaAndPianoAndName(String scala,int piano,String name){
+        return houseRepository.findByScalaAndPianoAndName(scala,piano,name)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+    public List<HouseDTO>getAllHousesByScalaAndPianoAndSurname(String scala,int piano,String surname){
+        return houseRepository.findByScalaAndPianoAndName(scala,piano,surname)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+
+    public List<HouseDTO>getAllHousesByScalaAndInternoAndNameAndSurname(String scala,int interno,String name,String surname){
+        return houseRepository.findByScalaAndInternoAndNameAndSurname(scala,interno,name,surname)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+
+    public List<HouseDTO> getAllHousesByScalaAndInternoAndName(String scala, int interno, String name){
+        return houseRepository.findByScalaAndInternoAndName(scala,interno,name)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+    public List<HouseDTO> getAllHousesByScalaAndInternoAndSurname(String scala, int interno, String surname){
+        return houseRepository.findByScalaAndInternoAndSurname(scala,interno,surname)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+    public List<HouseDTO>getAllHousesByScalaAndPianoAndInternoAndSurname(String scala,int piano,int interno,String surname){
+        return houseRepository.findByScalaAndPianoAndInternoAndSurname(scala,piano,interno,surname)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+
+    public List<HouseDTO>getAllHousesByScalaAndNameAndSurname(String scala,String name,String surname){
+        return houseRepository.findByScalaAndNameAndSurname(scala,name,surname)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+    public List<HouseDTO> getAllHousesByScalaAndName(String scala,String name){
+        return houseRepository.findByScalaAndName(scala,name)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+    public List<HouseDTO> getAllHousesByScalaAndSurname(String scala,String surname){
+        return houseRepository.findByScalaAndSurname(scala,surname)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+    public List<HouseDTO> getAllHousesByScalaAndInterno(String scala,int interno){
+        return houseRepository.findByScalaAndInterno(scala,interno)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
     public List<HouseDTO>getAllHousesByInterno(int interno){
         return houseRepository.findByInterno(interno)
         .stream().map(houseMapper::entityToDto)
@@ -150,6 +208,11 @@ public class HouseServiceImpl implements HouseService {
     }
     public List<HouseDTO>getAllHousesByInternoAndName(int interno,String name){
         return houseRepository.findByInternoAndName(interno,name)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+    public List<HouseDTO>getAllHousesByInternoAndSurname(int interno,String surname){
+        return houseRepository.findByInternoAndSurname(interno,surname)
         .stream().map(houseMapper::entityToDto)
         .toList();
     }
@@ -183,123 +246,162 @@ public class HouseServiceImpl implements HouseService {
         .stream().map(houseMapper::entityToDto)
         .toList();
     }
+    public List<HouseDTO>getAllHousesByPianoAndSurname(int piano,String surname){
+        return houseRepository.findByPianoAndSurname(piano,surname)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
+    public List<HouseDTO>getAllHousesByPianoAndInternoAndSurname(int piano,int interno,String surname){
+        return houseRepository.findByPianoAndInternoAndSurname(piano,interno,surname)
+        .stream().map(houseMapper::entityToDto)
+        .toList();
+    }
     
     
     
-    public List<HouseDTO>commandGetHandler(HouseDTO house){
-    if (house.getScala() != null) {
-        if (house.getPiano() == 0) {
-            if (house.getInterno() == 0) {
-                if (house.getUser() == null || house.getUser().getName() == null) {
-                    if (house.getUser() == null || house.getUser().getSurname() == null) {
+    public List<HouseDTO> commandGetHandler(HouseDTO house) {
+        // Se nessun campo è stato impostato, restituisci tutte le case
+        if (house.getScala() == null && house.getPiano() == 0 && house.getInterno() == 0 && 
+            (house.getUser() == null || (house.getUser().getName() == null && house.getUser().getSurname() == null))) {
+            return getAllHouses();
+        }
+    
+        // Controlla combinazioni di campi e restituisci le case corrispondenti
+        if (house.getScala() != null) {
+            if (house.getPiano() == 0) {
+                if (house.getInterno() == 0) {
+                    if (house.getUser() == null || (house.getUser().getName() == null && house.getUser().getSurname() == null)) {
                         return getAllHousesByScala(house.getScala());
                     }
+                    if (house.getUser() != null) {
+                        if (house.getUser().getName() != null && house.getUser().getSurname() != null) {
+                            return getAllHousesByScalaAndNameAndSurname(house.getScala(), house.getUser().getName(), house.getUser().getSurname());
+                        }
+                        if (house.getUser().getName() != null) {
+                            return getAllHousesByScalaAndName(house.getScala(), house.getUser().getName());
+                        }
+                        if (house.getUser().getSurname() != null) {
+                            return getAllHousesByScalaAndSurname(house.getScala(), house.getUser().getSurname());
+                        }
+                    }
                 } else {
-                    if (house.getUser() != null || house.getUser().getSurname() != null) {
-                        return getAllHousesByScalaAndPianoAndInternoAndNameAndSurname(house.getScala(), house.getPiano(), house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
-                    } else {
-                        return getAllHousesByScalaAndPianoAndInternoAndName(house.getScala(), house.getPiano(), house.getInterno(), house.getUser().getName());
+                    if (house.getUser() == null || (house.getUser().getName() == null && house.getUser().getSurname() == null)) {
+                        return getAllHousesByScalaAndInterno(house.getScala(), house.getInterno());
+                    }
+                    if (house.getUser() != null) {
+                        if (house.getUser().getName() != null && house.getUser().getSurname() != null) {
+                            return getAllHousesByScalaAndInternoAndNameAndSurname(house.getScala(), house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
+                        }
+                        if (house.getUser().getName() != null) {
+                            return getAllHousesByScalaAndInternoAndName(house.getScala(), house.getInterno(), house.getUser().getName());
+                        }
+                        if (house.getUser().getSurname() != null) {
+                            return getAllHousesByScalaAndInternoAndSurname(house.getScala(), house.getInterno(), house.getUser().getSurname());
+                        }
                     }
                 }
             } else {
-                if (house.getUser() == null || house.getUser().getName() == null) {
-                    if (house.getUser() == null || house.getUser().getSurname() == null) {
-                        return getAllHousesByInterno(house.getInterno());
-                    }
-                } else {
-                    if (house.getUser() != null || house.getUser().getSurname() != null) {
-                        return getAllHousesByInternoAndNameAndSurname(house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
-                    } else {
-                        return getAllHousesByInternoAndName(house.getInterno(), house.getUser().getName());
-                    }
-                }
-            }
-        } else {
-            if (house.getInterno() == 0) {
-                if (house.getUser() == null || house.getUser().getName() == null) {
-                    if (house.getUser() == null || house.getUser().getSurname() == null) {
+                if (house.getInterno() == 0) {
+                    if (house.getUser() == null || (house.getUser().getName() == null && house.getUser().getSurname() == null)) {
                         return getAllHousesByScalaAndPiano(house.getScala(), house.getPiano());
                     }
-                } else {
-                    if (house.getUser() != null || house.getUser().getSurname() != null) {
-                        return getAllHousesByScalaAndPianoAndInternoAndNameAndSurname(house.getScala(), house.getPiano(), house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
-                    } else {
-                        return getAllHousesByScalaAndPianoAndInternoAndName(house.getScala(), house.getPiano(), house.getInterno(), house.getUser().getName());
+                    if (house.getUser() != null) {
+                        if (house.getUser().getName() != null && house.getUser().getSurname() != null) {
+                            return getAllHousesByScalaAndPianoAndNameAndSurname(house.getScala(), house.getPiano(), house.getUser().getName(), house.getUser().getSurname());
+                        }
+                        if (house.getUser().getName() != null) {
+                            return getAllHousesByScalaAndPianoAndName(house.getScala(), house.getPiano(), house.getUser().getName());
+                        }
+                        if (house.getUser().getSurname() != null) {
+                            return getAllHousesByScalaAndPianoAndSurname(house.getScala(), house.getPiano(), house.getUser().getSurname());
+                        }
                     }
-                }
-            } else {
-                if (house.getUser() == null || house.getUser().getName() == null) {
-                    if (house.getUser() == null || house.getUser().getSurname() == null) {
+                } else {
+                    if (house.getUser() == null || (house.getUser().getName() == null && house.getUser().getSurname() == null)) {
                         return getAllHousesByScalaAndPianoAndInterno(house.getScala(), house.getPiano(), house.getInterno());
                     }
-                } else {
-                    if (house.getUser() != null || house.getUser().getSurname() != null) {
-                        return getAllHousesByScalaAndPianoAndInternoAndNameAndSurname(house.getScala(), house.getPiano(), house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
-                    } else {
-                        return getAllHousesByScalaAndPianoAndInternoAndName(house.getScala(), house.getPiano(), house.getInterno(), house.getUser().getName());
-                    }
-                }
-            }
-        }
-    } else {
-        if (house.getPiano() != 0) {
-            if (house.getInterno() == 0) {
-                if (house.getUser() == null || house.getUser().getName() == null) {
-                    if (house.getUser() == null || house.getUser().getSurname() == null) {
-                        return getAllHousesByPiano(house.getPiano());
-                    }
-                } else {
-                    if (house.getUser() != null || house.getUser().getSurname() != null) {
-                        return getAllHousesByPianoAndInternoAndNameAndSurname(house.getPiano(), house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
-                    } else {
-                        return getAllHousesByPianoAndInternoAndName(house.getPiano(), house.getInterno(), house.getUser().getName());
-                    }
-                }
-            } else {
-                if (house.getUser() == null || house.getUser().getName() == null) {
-                    if (house.getUser() == null || house.getUser().getSurname() == null) {
-                        return getAllHousesByPianoAndInterno(house.getPiano(), house.getInterno());
-                    }
-                } else {
-                    if (house.getUser() != null || house.getUser().getSurname() != null) {
-                        return getAllHousesByPianoAndInternoAndNameAndSurname(house.getPiano(), house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
-                    } else {
-                        return getAllHousesByPianoAndInternoAndName(house.getPiano(), house.getInterno(), house.getUser().getName());
+                    if (house.getUser() != null) {
+                        if (house.getUser().getName() != null && house.getUser().getSurname() != null) {
+                            return getAllHousesByScalaAndPianoAndInternoAndNameAndSurname(house.getScala(), house.getPiano(), house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
+                        }
+                        if (house.getUser().getName() != null) {
+                            return getAllHousesByScalaAndPianoAndInternoAndName(house.getScala(), house.getPiano(), house.getInterno(), house.getUser().getName());
+                        }
+                        if (house.getUser().getSurname() != null) {
+                            return getAllHousesByScalaAndPianoAndInternoAndSurname(house.getScala(), house.getPiano(), house.getInterno(), house.getUser().getSurname());
+                        }
                     }
                 }
             }
         } else {
-            if (house.getInterno() != 0) {
-                if (house.getUser() == null || house.getUser().getName() == null) {
-                    if (house.getUser() == null || house.getUser().getSurname() == null) {
-                        return getAllHousesByInterno(house.getInterno());
+            if (house.getPiano() != 0) {
+                if (house.getInterno() == 0) {
+                    if (house.getUser() == null || (house.getUser().getName() == null && house.getUser().getSurname() == null)) {
+                        return getAllHousesByPiano(house.getPiano());
+                    }
+                    if (house.getUser() != null) {
+                        if (house.getUser().getName() != null && house.getUser().getSurname() != null) {
+                            return getAllHousesByPianoAndNameAndSurname(house.getPiano(), house.getUser().getName(), house.getUser().getSurname());
+                        }
+                        if (house.getUser().getName() != null) {
+                            return getAllHousesByPianoAndName(house.getPiano(), house.getUser().getName());
+                        }
+                        if (house.getUser().getSurname() != null) {
+                            return getAllHousesByPianoAndSurname(house.getPiano(), house.getUser().getSurname());
+                        }
                     }
                 } else {
-                    if (house.getUser() != null || house.getUser().getSurname() != null) {
-                        return getAllHousesByInternoAndNameAndSurname(house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
-                    } else {
-                        return getAllHousesByInternoAndName(house.getInterno(), house.getUser().getName());
+                    if (house.getUser() == null || (house.getUser().getName() == null && house.getUser().getSurname() == null)) {
+                        return getAllHousesByPianoAndInterno(house.getPiano(), house.getInterno());
+                    }
+                    if (house.getUser() != null) {
+                        if (house.getUser().getName() != null && house.getUser().getSurname() != null) {
+                            return getAllHousesByPianoAndInternoAndNameAndSurname(house.getPiano(), house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
+                        }
+                        if (house.getUser().getName() != null) {
+                            return getAllHousesByPianoAndInternoAndName(house.getPiano(), house.getInterno(), house.getUser().getName());
+                        }
+                        if (house.getUser().getSurname() != null) {
+                            return getAllHousesByPianoAndInternoAndSurname(house.getPiano(), house.getInterno(), house.getUser().getSurname());
+                        }
                     }
                 }
             } else {
-                if (house.getUser() == null || house.getUser().getName() == null) {
-                    if (house.getUser() == null || house.getUser().getSurname() == null) {
-                        return getAllHousesBySurname(house.getUser().getSurname());
+                if (house.getInterno() != 0) {
+                    if (house.getUser() == null || (house.getUser().getName() == null && house.getUser().getSurname() == null)) {
+                        return getAllHousesByInterno(house.getInterno());
+                    }
+                    if (house.getUser() != null) {
+                        if (house.getUser().getName() != null && house.getUser().getSurname() != null) {
+                            return getAllHousesByInternoAndNameAndSurname(house.getInterno(), house.getUser().getName(), house.getUser().getSurname());
+                        }
+                        if (house.getUser().getName() != null) {
+                            return getAllHousesByInternoAndName(house.getInterno(), house.getUser().getName());
+                        }
+                        if (house.getUser().getSurname() != null) {
+                            return getAllHousesByInternoAndSurname(house.getInterno(), house.getUser().getSurname());
+                        }
                     }
                 } else {
-                    if (house.getUser() != null || house.getUser().getSurname() != null) {
-                        return getAllHousesByNameAndSurname(house.getUser().getName(), house.getUser().getSurname());
-                    } else {
-                        return getAllHousesByName(house.getUser().getName());
+                    if (house.getUser() != null) {
+                        if (house.getUser().getName() != null && house.getUser().getSurname() != null) {
+                            return getAllHousesByNameAndSurname(house.getUser().getName(), house.getUser().getSurname());
+                        }
+                        if (house.getUser().getName() != null) {
+                            return getAllHousesByName(house.getUser().getName());
+                        }
+                        if (house.getUser().getSurname() != null) {
+                            return getAllHousesBySurname(house.getUser().getSurname());
+                        }
                     }
                 }
             }
         }
+    
+        // Se nessuna condizione è soddisfatta, restituisci tutte le case
+        return getAllHouses();
     }
-
-    // Se nessuna condizione è soddisfatta, restituisco tutte le case
-    return getAllHouses();
-}
+    
 
 
     @Override
