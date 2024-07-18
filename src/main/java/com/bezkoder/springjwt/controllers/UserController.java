@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.bezkoder.springjwt.models.ResponseDTO;
@@ -25,6 +26,10 @@ public class UserController {
 
     @Autowired
     HouseService houseService;
+
+    @Autowired
+    PasswordEncoder encoder;
+
 
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @PutMapping("putUpdate")
@@ -56,6 +61,7 @@ public class UserController {
             response.setType("patch update");
             response.setHTTPstatus("200");
             response.setMessage("user updated");
+            user.setPassword( encoder.encode(user.getPassword()));
             response.setO(user);
             userService.newUser((UserDTO) response.getO());
             return response;}
