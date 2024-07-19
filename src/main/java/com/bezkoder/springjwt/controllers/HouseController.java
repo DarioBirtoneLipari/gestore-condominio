@@ -25,7 +25,7 @@ public class HouseController {
     @PostMapping("save")
     public ResponseDTO newHouse(@RequestBody HouseDTO house){
         ResponseDTO response = new ResponseDTO();
-        if(houseService.checkValue(house)){
+        if(houseService.checkValue(house)&& houseService.checkTriple(house.getScala(), house.getPiano(), house.getInterno())){
             response.setType("save");
             response.setHTTPstatus("200");
             response.setMessage("house saved");
